@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Top Up Saldo</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #d9f1ff, #a7d8ff);
+      color: #333;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .container {
+      width: 500px;
+      margin: 60px auto;
+      background: #ffffff;
+      padding: 25px 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #0077cc;
+      font-size: 24px;
+    }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: 600;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #b3e0ff;
+      border-radius: 8px;
+      background: #f8fcff;
+      color: #333;
+      outline: none;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    .btn {
+      background: #33bbff;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      margin: 12px 6px 0 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #0099e6;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,153,230,0.3);
+    }
+    .info-box {
+      background: #f0faff;
+      border: 1px solid #99ddff;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 18px 0;
+      font-size: 14px;
+    }
+  </style>
+  <script>
+    function updateInfo() {
+      let metode = document.getElementById("metode").value;
+      let info = document.getElementById("infoBox");
+
+      if (metode === "Bank") {
+        info.innerHTML = `
+          <p><b>Nama Pemilik Rekening:</b> Ridwan Maulana</p>
+          <p><b>Bank:</b> BCA</p>
+          <p><b>No. Rekening:</b> 7425065441</p>
+        `;
+      } else if (metode === "QRIS") {
+        info.innerHTML = `
+          <p><b>Nama Merchant:</b> PT. DULO DIGITAL CREATIVE / Atryd.co</p>
+          <p><b>Kode QRIS:</b></p>
+          <img src="https://images.bukaolshop.com/hosting/138109/2518b8f2946038319.png" alt="QRIS" width="160">
+        `;
+      } else if (metode === "E-Wallet") {
+        info.innerHTML = `
+          <p><b>Nama Akun:</b> Ridwan Maulana</p>
+          <p><b>Gopay:</b> 0895708398855</p>
+          <p><b>DANA:</b> 081386768976</p>
+        `;
+      } else {
+        info.innerHTML = `<p>Silakan pilih metode penyetoran</p>`;
+      }
+    }
+
+    function submitForm(event) {
+      event.preventDefault();
+
+      if (!document.getElementById("agree").checked) {
+        alert("Harap centang persetujuan sebelum melanjutkan.");
+        return;
+      }
+
+      // Ambil data form
+      let metode = document.getElementById("metode").value;
+      let ket = document.querySelector("input[name='keterangan']").value;
+
+      // Format pesan
+      let pesan = `Halo Admin, saya ingin konfirmasi top up.%0A` +
+                  `Metode: ${metode}%0A` +
+                  `Keterangan: ${ket}`;
+
+      // Nomor WA tujuan
+      let nomorAdmin = "6281318199894"; 
+      let url = "https://api.whatsapp.com/send?phone=" + nomorAdmin + "&text=" + pesan;
+
+      // Kirim ke WA
+      window.open(url, "_blank");
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>Top Up Saldo</h2>
+
+    <form onsubmit="submitForm(event)">
+      <label>Metode Penyetoran*</label>
+      <select id="metode" onchange="updateInfo()">
+        <option value="">-- Pilih Metode --</option>
+        <option value="Bank">Bank Transfer</option>
+        <option value="QRIS">QRIS</option>
+        <option value="E-Wallet">E-Wallet</option>
+      </select>
+
+      <div class="info-box" id="infoBox">
+        <p>Silakan pilih metode penyetoran</p>
+      </div>
+
+      <label>Keterangan</label>
+      <input type="text" name="keterangan" placeholder="No. Referensi / Nama Pengirim">
+
+      <label>Bukti Transfer</label>
+      <input type="file" id="fileUpload">
+
+      <div>
+        <input type="checkbox" id="agree"> 
+        <label for="agree">Saya telah membaca dan menyetujui Syarat dan Ketentuan Promosi.</label>
+      </div>
+
+      <button type="submit" class="btn">Kirim</button>
+    </form>
+  </div>
+</body>
+</html>
